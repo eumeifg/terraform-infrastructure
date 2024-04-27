@@ -1,0 +1,10 @@
+serviceAccount:
+  annotations:
+    eks.amazonaws.com/role-arn: ${service_account}
+serviceMonitor:
+  enabled: true
+affinity: ""
+clusterName: ${cluster_name}
+clusterEndpoint: ${cluster_endpoint}
+aws:
+  defaultInstanceProfile: ${aws_default_instance_profile}

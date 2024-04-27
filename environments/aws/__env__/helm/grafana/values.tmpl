@@ -1,0 +1,40 @@
+fullnameOverride: "grafana"
+
+admin:
+  password: ${password}
+
+datasources:
+  secretName: "${grafana_datasources}"
+
+grafana:
+  updateStrategy:
+    type: Recreate
+  resources:
+    requests:
+      cpu: 50m
+      memory: 256Mi
+    limits:
+      cpu: 500m
+      memory: 1Gi
+
+persistence:
+  size: 2Gi
+
+metrics:
+  enabled: true
+  serviceMonitor:
+    enabled: true
+
+imageRenderer:
+  enabled: true
+  resources:
+    requests:
+      cpu: 10m
+      memory: 64Mi
+    limits:
+      cpu: 200m
+      memory: 512Mi
+  metrics:
+    enabled: true
+    serviceMonitor:
+      enabled: true

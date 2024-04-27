@@ -1,0 +1,34 @@
+{
+  "Version" : "2012-10-17",
+  "Statement" : [
+    {
+      "Effect" : "Allow",
+      "Action" : [
+        "ecr:BatchCheckLayerAvailability",
+        "ecr:BatchGetImage",
+        "ecr:PutImage",
+        "ecr:GetDownloadUrlForLayer",
+        "ecr:GetAuthorizationToken",
+        "ecr:InitiateLayerUpload",
+        "ecr:UploadLayerPart",
+        "ecr:CompleteLayerUpload"
+      ],
+      "Resource" : "*"
+    },
+    {
+        "Effect": "Allow",
+        "Action": [
+            "kms:Decrypt",
+            "kms:Encrypt",
+            "kms:GenerateDataKey",
+            "kms:ReEncryptTo",
+            "kms:GenerateDataKeyWithoutPlaintext",
+            "kms:DescribeKey",
+            "kms:GenerateDataKeyPairWithoutPlaintext",
+            "kms:GenerateDataKeyPair",
+            "kms:ReEncryptFrom"
+        ],
+        "Resource": "arn:aws:kms:eu-central-1:310830963532:key/mrk-9e8c23191f1741289211dadb4d0767e8"
+    }
+  ]
+}

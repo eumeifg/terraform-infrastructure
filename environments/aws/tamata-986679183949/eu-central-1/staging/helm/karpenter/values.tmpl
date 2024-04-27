@@ -1,0 +1,12 @@
+serviceAccount:
+  annotations:
+    eks.amazonaws.com/role-arn: ${service_account}
+serviceMonitor:
+  enabled: true
+affinity: ""
+settings:
+  aws:
+    defaultInstanceProfile: ${aws_default_instance_profile}
+    clusterName: ${cluster_name}
+    clusterEndpoint: ${cluster_endpoint}
+    enablePodENI: true

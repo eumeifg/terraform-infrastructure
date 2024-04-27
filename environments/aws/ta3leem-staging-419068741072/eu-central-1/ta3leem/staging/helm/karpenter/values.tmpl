@@ -1,0 +1,14 @@
+serviceAccount:
+  annotations:
+    eks.amazonaws.com/role-arn: ${service_account}
+serviceMonitor:
+  enabled: true
+tolerations:
+  - key: "app.kubernetes.io/name"
+    operator: "Equal"
+    value: "karpenter"
+    effect: "NoSchedule"
+clusterName: ${cluster_name}
+clusterEndpoint: ${cluster_endpoint}
+aws:
+  defaultInstanceProfile: ${aws_default_instance_profile}

@@ -1,0 +1,10 @@
+serviceAccount:
+  name: external-dns
+  annotations:
+    eks.amazonaws.com/role-arn: ${role_arn}
+serviceMonitor:
+  enabled: true
+policy: sync
+txtOwnerId: ${txtOwnerId}
+domainFilters:
+  - creativeadvtech.ml

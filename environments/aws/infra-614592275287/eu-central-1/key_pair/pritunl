@@ -1,0 +1,21 @@
+include {
+  path = find_in_parent_folders()
+}
+
+locals {
+  common_vars = read_terragrunt_config(find_in_parent_folders("common.hcl"))
+  params      = local.common_vars.locals.common_parameters
+  environment = local.common_vars.locals.environment_name
+  tags        = local.common_vars.locals.common_tags
+}
+
+terraform {
+  source = "git::git@github.com:terraform-aws-modules/terraform-aws-key-pair.git///?ref=v1.0.1"
+}
+
+inputs = {
+  key_name   = "pritunl-key-pair"
+  public_key = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDOw7UFABjvnNuj51C23dmUQ66uYm3Popa9AoMFYP7wCxgldEoH86MPhQ6f0mpz7kekGLzV7y0nvWy2iAtzCE2M050aReJVDnXA06dNGlvFjf+gzP8MEoLAQ8G1jO/f4H8FOL4X6e4djl+efGXQN0NmJ6uMBjg81L+FDgfYdSDxu8si/EjQDL1vLH9FDG/IYhRhH/x6fdMwQ97zclXwsY6GTRj0tqBOadfj5q6797Aq0cj/amU+RkBXmzCQ/9bP+Fq9stUUbMtoHtYKL5xJ1KesdCOK7hX8p/mqmpa7xZ/a0R8uT3UTnSPmDCWJupS9sd380Q0gRh3sDzIRRrLe99qrh6qBUP1QgEOv4ol84F0A5cGslCWIXY+3gf5iBfugJVAXnT9jkegKu0BzX8f+/vtn3xf3fiymWJqIFCiwGb9tC4h2YON3ox/EX2u5k1i8GTEKS9Mr4/fi1ehS12bmvZFpO/xc5Bb7TzvDvqDGeGZQHg6BLERAu80XBWshmC+OjmDOTBp/vUUWJmBNf5T1QiDfPqbw+ev4oGXKzg1hB4zYu/5V2tcuL3lTxSDSb6iDqLXjLIn78jnw2t6eOCv8pezKiSfGOwEHtv8vjMRS2hrDDSGzJUcVbZpW0QtUNAxKVWKIeSjBDXxSeRVHWq6engo2+ii5sep7vG5ok+rODaLlpQ=="
+  tags = local.tags
+}
+

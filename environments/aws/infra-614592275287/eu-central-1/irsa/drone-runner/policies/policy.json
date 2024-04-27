@@ -1,0 +1,45 @@
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": [
+                "ecr:PutLifecyclePolicy",
+                "ecr:PutImageTagMutability",
+                "ecr:StartImageScan",
+                "ecr:CreateRepository",
+                "ecr:PutImageScanningConfiguration",
+                "ecr:UploadLayerPart",
+                "ecr:BatchDeleteImage",
+                "ecr:DeleteLifecyclePolicy",
+                "ecr:DeleteRepository",
+                "ecr:PutImage",
+                "ecr:CompleteLayerUpload",
+                "ecr:StartLifecyclePolicyPreview",
+                "ecr:InitiateLayerUpload",
+                "ecr:DeleteRepositoryPolicy"
+            ],
+            "Resource": "arn:aws:ecr:eu-central-1::*"
+        },
+        {
+            "Effect": "Allow",
+            "Action": "ecr:GetAuthorizationToken",
+            "Resource": "*"
+        },
+        {
+            "Effect": "Allow",
+            "Action": "ecr:BatchCheckLayerAvailability",
+            "Resource": "arn:aws:ecr:eu-central-1::*"
+        },
+	{
+            "Effect": "Allow",
+            "Action": [
+		"kms:Encrypt",
+		"kms:Decrypt"
+            ],
+            "Resource": [
+		"arn:aws:kms:eu-central-1:310830963532:key/mrk-9e8c23191f1741289211dadb4d0767e8"
+            ]
+	}
+    ]
+}

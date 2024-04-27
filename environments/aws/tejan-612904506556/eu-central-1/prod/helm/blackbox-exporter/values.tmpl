@@ -1,0 +1,17 @@
+resources:
+  limits:
+    memory: 32Mi
+  requests:
+    cpu: 20m
+    memory: 32Mi
+serviceMonitor:
+  enabled: true
+  targets:
+  - name: tgt-frappe
+    url: https://tgt.tiejan.com/
+  - name: tiejan-frappe
+    url: https://cloud.tiejan.com
+  - name: tiejan-grafana
+    url: https://grafana.tiejan.com/login
+  - name: erp-frappe
+    url: https://erp.tiejan.com

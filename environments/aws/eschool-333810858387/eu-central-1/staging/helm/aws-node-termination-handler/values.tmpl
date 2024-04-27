@@ -1,0 +1,12 @@
+resources:
+  limits:
+    memory: 32Mi
+  requests:
+    cpu: 20m
+    memory: 32Mi
+enablePrometheusServer: true
+serviceMonitor:
+  create: true
+awsRegion: "eu-central-1"
+nodeSelector:
+  karpenter.sh/capacity-type: "spot"

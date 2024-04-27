@@ -1,0 +1,53 @@
+apiVersion: karpenter.sh/v1alpha5
+kind: Provisioner
+metadata:
+  name: eks-eschool-staging
+spec:
+  consolidation:
+    enabled: true
+  labels:
+    project: eschool
+    environment: staging
+  requirements:
+    - key: "karpenter.k8s.aws/instance-cpu"
+      operator: In
+      values:
+        - "4"
+    - key: "topology.kubernetes.io/zone"
+      operator: In
+      values:
+        - eu-central-1a
+        - eu-central-1b
+    - key: "kubernetes.io/arch"
+      operator: In
+      values:
+        - amd64
+    - key: "karpenter.sh/capacity-type"
+      operator: In
+      values:
+        - spot
+  limits:
+    resources:
+      cpu: "64"
+      memory: 256Gi
+  providerRef:
+    name: eks-eschool-staging
+---
+apiVersion: karpenter.k8s.aws/v1alpha1
+kind: AWSNodeTemplate
+metadata:
+  name: eks-eschool-staging
+spec:
+  metadataOptions:
+    httpEndpoint: enabled
+    httpProtocolIPv6: disabled
+    httpPutResponseHopLimit: 2
+    httpTokens: required
+  subnetSelector:
+    karpenter.sh/discovery: eks-eschool-staging
+  securityGroupSelector:
+    karpenter.sh/discovery: eks-eschool-staging
+  tags:
+    Environment: staging
+    Owner: Creative DevOps
+    Project: eschool

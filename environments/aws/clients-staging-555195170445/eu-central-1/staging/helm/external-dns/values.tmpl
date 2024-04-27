@@ -1,0 +1,11 @@
+serviceAccount:
+  name: external-dns
+  annotations:
+    eks.amazonaws.com/role-arn: ${role_arn}
+rbac:
+  create: true
+policy: sync
+txtOwnerId: ${txtOwnerId}
+domainFilters:
+  - creativeadvtech.ml
+logLevel: info

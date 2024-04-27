@@ -1,0 +1,20 @@
+autoDiscovery:
+  clusterName: ${cluster_name}
+  tags:
+  - k8s.io/cluster-autoscaler/enabled
+  - k8s.io/cluster-autoscaler/${cluster_name}
+awsRegion: eu-central-1
+extraArgs:
+  logtostderr: true
+  stderrthreshold: info
+  v: 4
+  write-status-configmap: true
+  status-config-map-name: cluster-autoscaler-status
+  scale-down-enabled: true
+  leader-elect: false
+rbac:
+  pspEnabled: true
+  serviceAccount:
+    name: cluster-autoscaler
+    annotations:
+      eks.amazonaws.com/role-arn: ${role_arn}

@@ -1,0 +1,22 @@
+include {
+  path = find_in_parent_folders()
+}
+
+locals {
+  common_vars = read_terragrunt_config(find_in_parent_folders("common.hcl"))
+  params      = local.common_vars.locals.common_parameters
+  environment = local.common_vars.locals.environment_name
+  tags        = local.common_vars.locals.common_tags
+}
+
+terraform {
+  source = "https://github.com/terraform-aws-modules/terraform-aws-key-pair.git///?ref=v1.0.1"
+}
+
+
+inputs = {
+  key_name   = "squid-key-pair"
+  public_key = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQClLjgHytE6IqCjD+VJX0d3V8zffNWGAmxixLkF0xr/V2zPSw6jaFk38Z2Nj69PkmXau2apSNijJz2uSL688UmjVdFewzcesgW7c9AmJLb+gfMqVXS0+DH5fe7cVgOIlxflp6LUlxcnQfebKtV8gUeQ9GvY+SilJsryL85bYb46i+NVdcx4juXOAkA60iSj3QqusxjacwRoS45IUYLne8I1rGgqsVtOnNmhvBGdwYf7uESczYjKVuj416H2SyrnJIhk4I14/HGeER+kGxrvPfBl0PBGYynApYOZ5GZy/2eeynWHzWdzB2eDZ510KgcNUHEkyoHRe2T12Lh52y9H+aLt"
+  tags = local.tags
+}
+

@@ -1,0 +1,28 @@
+include {
+  path = find_in_parent_folders()
+}
+
+locals {
+  common_vars = read_terragrunt_config(find_in_parent_folders("prod.hcl"))
+  params      = local.common_vars.locals.common_parameters
+  environment = local.common_vars.locals.environment_name
+  tags        = local.common_vars.locals.common_tags
+}
+
+terraform {
+  source = "../../../../../../modules/aws/wafv2-ip-set///"
+}
+
+inputs = {
+  name = "taza-baghdad-office-egress"
+
+  scope              = "CLOUDFRONT"
+  ip_address_version = "IPV4"
+
+  ## Taza Baghdad Office's egress address.
+  addresses = [
+    "109.224.23.232/29",
+  ]
+
+  tags = local.tags
+}

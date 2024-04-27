@@ -1,0 +1,49 @@
+apiVersion: karpenter.sh/v1alpha5
+kind: Provisioner
+metadata:
+  name: eks-tasleem-staging
+spec:
+  consolidation:
+    enabled: true
+  requirements:
+    - key: "node.kubernetes.io/instance-type"
+      operator: In
+      values: ["c5a.xlarge", "c5.xlarge", "c5ad.xlarge", "c6a.xlarge", "c5a.2xlarge", "c5.2xlarge"]
+    - key: "topology.kubernetes.io/zone"
+      operator: In
+      values:
+        - eu-central-1a
+        - eu-central-1b
+    - key: "kubernetes.io/arch"
+      operator: In
+      values:
+        - amd64
+    - key: "karpenter.sh/capacity-type"
+      operator: In
+      values:
+        - spot
+  limits:
+    resources:
+      cpu: "64"
+      memory: 128Gi
+  providerRef:
+    name: eks-tasleem-staging
+---
+apiVersion: karpenter.k8s.aws/v1alpha1
+kind: AWSNodeTemplate
+metadata:
+  name: eks-tasleem-staging
+spec:
+  metadataOptions:
+    httpEndpoint: enabled
+    httpProtocolIPv6: disabled
+    httpPutResponseHopLimit: 2
+    httpTokens: required
+  subnetSelector:
+    karpenter.sh/discovery: eks-tasleem-staging
+  securityGroupSelector:
+    karpenter.sh/discovery: eks-tasleem-staging
+  tags:
+    Environment: staging
+    Owner: Creative DevOps
+    Project: TASLEEM

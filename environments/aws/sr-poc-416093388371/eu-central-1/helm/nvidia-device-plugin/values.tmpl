@@ -1,0 +1,12 @@
+resources:
+  limits:
+    memory: 512Mi
+  requests:
+    cpu: 100m
+    memory: 512Mi
+nodeSelector:
+  group: "gpu"
+tolerations:
+  - key: nvidia.com/gpu
+    operator: "Exists"
+    effect: "NoSchedule"

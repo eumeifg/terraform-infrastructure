@@ -1,0 +1,14 @@
+image:
+  repository: amazon/aws-alb-ingress-controller
+  tag: v2.4.4
+clusterName: ${cluster_name}
+serviceAccount:
+  annotations:
+    eks.amazonaws.com/role-arn: ${role_arn}
+
+resources:
+  limits:
+    memory: 128Mi
+  requests:
+    cpu: 100m
+    memory: 128Mi

@@ -1,0 +1,60 @@
+env:
+  open:
+    STORAGE: amazon
+    STORAGE_AMAZON_BUCKET: ${bucket_name}
+    STORAGE_AMAZON_REGION: ${bucket_region}
+    STORAGE_AMAZON_PREFIX: "/"
+    AWS_SDK_LOAD_CONFIG: true
+    DEPTH: 1
+    DEBUG: false
+    DISABLE_API: false
+    DISABLE_METRICS: false
+    BEARER_AUTH: true
+    AUTH_REALM: http://chartmuseum-auth-server:8080/oauth/token
+    AUTH_SERVICE: chartmuseum-auth-server:8080
+
+bearerAuth:
+  secret:
+    enabled: true
+    publicKeySecret: ${public_key_secret}
+
+serviceMonitor:
+  enabled: true
+
+resources:
+  limits:
+    cpu: 100m
+    memory: 128Mi
+  requests:
+    cpu: 10m
+    memory: 16Mi
+
+serviceAccount:
+  create: true
+  name: chartmuseum-sa
+  automountServiceAccountToken: true
+  annotations:
+    eks.amazonaws.com/role-arn: ${role_arn}
+
+securityContext:
+  enabled: true
+  fsGroup: 65534
+
+ingress:
+  enabled: true
+  labels:
+    dns: "route53"
+  annotations:
+    external-dns.alpha.kubernetes.io/hostname: chartmuseum.creativeadvtech.ml
+    kubernetes.io/ingress.class: alb
+    alb.ingress.kubernetes.io/ssl-redirect: '443'
+    alb.ingress.kubernetes.io/ssl-policy: ELBSecurityPolicy-TLS-1-1-2017-01
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP":80, "HTTPS":443}]'
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/backend-protocol: HTTP
+    alb.ingress.kubernetes.io/target-type: ip
+    alb.ingress.kubernetes.io/group.name: infrastructure
+  hosts:
+    - name: chartmuseum.creativeadvtech.ml
+      path: /*
+      tls: true

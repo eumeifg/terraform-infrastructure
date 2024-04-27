@@ -1,0 +1,66 @@
+helmDefaults:
+  wait: true
+  timeout: 1200
+
+repositories:
+  - name: eks
+    url: https://aws.github.io/eks-charts
+
+  - name: bitnami
+    url: https://charts.bitnami.com/bitnami
+
+  - name: aws-efs-csi-driver
+    url: https://kubernetes-sigs.github.io/aws-efs-csi-driver
+
+  - name: external-dns
+    url: https://kubernetes-sigs.github.io/external-dns
+
+
+releases:
+  - name: aws-efs-csi-driver
+    chart: aws-efs-csi-driver/aws-efs-csi-driver
+    version: 2.1.5
+    namespace: kube-system
+    wait: true
+    values:
+      - image:
+          repository: 602401143452.dkr.ecr.eu-central-1.amazonaws.com/eks/aws-efs-csi-driver
+          tag: v1.3.3
+        controller:
+          serviceAccount:
+            create: true
+            name: efs-csi-controller-sa
+            annotations:
+              eks.amazonaws.com/role-arn: {{ .Values.aws_efs_csi_driver.iam_role_arn }}
+
+  - name: external-dns
+    chart: external-dns/external-dns
+    version: 1.2.0
+    namespace: kube-system
+    values:
+      - serviceAccount:
+          name: external-dns
+          annotations:
+            eks.amazonaws.com/role-arn: {{ .Values.external_dns.iam_role_arn }}
+
+        policy: sync
+        txtOwnerId: {{ .Values.external_dns.txtOwnerId }}
+        domainFilters:
+          - creativeadvtech.ml
+        logLevel: info
+
+  - name: external-dns-priv
+    chart: external-dns/external-dns
+    version: 1.2.0
+    namespace: kube-system
+    values:
+      - serviceAccount:
+          name: external-dns-priv
+          annotations:
+            eks.amazonaws.com/role-arn: {{ .Values.external_dns_priv.iam_role_arn }}
+
+        policy: sync
+        txtOwnerId: {{ .Values.external_dns_priv.txtOwnerId }}
+        domainFilters:
+          - internal.creativeadvtech.com
+        logLevel: info

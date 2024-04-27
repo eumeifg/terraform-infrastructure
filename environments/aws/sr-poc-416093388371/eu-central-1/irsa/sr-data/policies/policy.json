@@ -1,0 +1,47 @@
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+          "Sid": "AllowKMSGenerateDataKey",
+          "Effect": "Allow",
+          "Action": [
+            "kms:GenerateDataKey"
+          ],
+          "Resource": [
+            "arn:aws:kms:eu-central-1:416093388371:key/fb058f96-e0e7-487d-8753-70d6760128e8"
+          ]
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+              "s3:GetObject",
+              "s3:DeleteObject",
+              "s3:PutObject",
+              "s3:AbortMultipartUpload",
+              "s3:ListMultipartUploadParts"
+            ],
+            "Resource": ["arn:aws:s3:::social-reputation-data/*"]
+          },
+          {
+            "Effect": "Allow",
+            "Action": ["s3:ListBucket"],
+            "Resource": ["arn:aws:s3:::social-reputation-data"]
+          },
+          {
+            "Effect": "Allow",
+            "Action": [
+              "s3:GetObject",
+              "s3:DeleteObject",
+              "s3:PutObject",
+              "s3:AbortMultipartUpload",
+              "s3:ListMultipartUploadParts"
+            ],
+            "Resource": ["arn:aws:s3:::social-reputation-models/*"]
+          },
+          {
+            "Effect": "Allow",
+            "Action": ["s3:ListBucket"],
+            "Resource": ["arn:aws:s3:::social-reputation-models"]
+          }
+        ]
+      }

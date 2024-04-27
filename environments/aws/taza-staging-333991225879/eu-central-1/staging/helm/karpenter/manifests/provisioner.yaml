@@ -1,0 +1,54 @@
+apiVersion: karpenter.sh/v1alpha5
+kind: Provisioner
+metadata:
+  name: eks-taza-staging
+spec:
+  consolidation:
+    enabled: true
+  requirements:
+    - key: "node.kubernetes.io/instance-type"
+      operator: NotIn
+      values:
+        - m6g.16xlarge
+        - m6gd.16xlarge
+        - r6g.16xlarge
+        - r6gd.16xlarge
+        - c6g.16xlarge
+    - key: "topology.kubernetes.io/zone"
+      operator: In
+      values:
+        - eu-central-1a
+        - eu-central-1b
+    - key: "kubernetes.io/arch"
+      operator: In
+      values:
+        - amd64
+    - key: "karpenter.sh/capacity-type"
+      operator: In
+      values:
+        - spot
+  limits:
+    resources:
+      cpu: "64"
+      memory: 256Gi
+  providerRef:
+    name: eks-taza-staging
+---
+apiVersion: karpenter.k8s.aws/v1alpha1
+kind: AWSNodeTemplate
+metadata:
+  name: eks-taza-staging
+spec:
+  metadataOptions:
+    httpEndpoint: enabled
+    httpProtocolIPv6: disabled
+    httpPutResponseHopLimit: 2
+    httpTokens: required
+  subnetSelector:
+    karpenter.sh/discovery: eks-taza-staging
+  securityGroupSelector:
+    karpenter.sh/discovery: eks-taza-staging
+  tags:
+    Environment: staging
+    Owner: Creative DevOps
+    Project: TAZA

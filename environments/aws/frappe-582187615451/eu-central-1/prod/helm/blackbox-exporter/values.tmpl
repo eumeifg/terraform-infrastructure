@@ -1,0 +1,25 @@
+resources:
+  limits:
+    memory: 32Mi
+  requests:
+    cpu: 20m
+    memory: 32Mi
+serviceMonitor:
+  enabled: true
+  targets:
+  - name: frappe-cat-production 
+    url: https://erp.creativeadvtech.ml
+  - name: frappe-cat-staging 
+    url: https://frappe.creativeadvtech.ml
+  - name: frappe-tabadul-production
+    url: https://eflow.tabadul.iq
+  - name: frappe-tabadul-staging
+    url: https://erp.tabadul.iq
+  - name: frappe-globaltek-dev
+    url: https://frappe.globaltek.iq
+  - name: frappe-tajalmazraa-production
+    url: https://erp.tajalmazraa.iq
+  - name: frappe-tajalmazraa-staging
+    url: https://frappe.tajalmazraa.iq
+  - name: grafana  
+    url: https://g-4a6t55fk8kvmex6.creativeadvtech.ml

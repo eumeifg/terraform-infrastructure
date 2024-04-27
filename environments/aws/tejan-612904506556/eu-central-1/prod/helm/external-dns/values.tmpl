@@ -1,0 +1,14 @@
+serviceAccount:
+  name: external-dns
+  annotations:
+    eks.amazonaws.com/role-arn: ${role_arn}
+serviceMonitor:
+  enabled: true
+policy: sync
+txtOwnerId: ${txtOwnerId}
+domainFilters:
+  - tiejan.com
+extraArgs:
+  - --provider=godaddy
+  - --godaddy-api-key= "${access_key}"
+  - --godaddy-api-secret= "${secret_key}"

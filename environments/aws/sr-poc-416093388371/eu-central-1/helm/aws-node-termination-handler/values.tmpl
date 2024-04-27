@@ -1,0 +1,14 @@
+resources:
+  limits:
+    cpu: 20m
+    memory: 32Mi
+  requests:
+    cpu: 20m
+    memory: 32Mi
+serviceMonitor:
+  create: true
+rbac:
+  pspEnabled: false
+awsRegion: "eu-central-1"
+nodeSelector:
+    karpenter.sh/capacity-type: "spot"

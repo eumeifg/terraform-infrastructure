@@ -1,0 +1,22 @@
+{
+	"data": "ENC[AES256_GCM,data:8KIk/ijaqFe3M7jYmLN199pHJDTQldbDv7vP/Bdv6dx0Nl04KFYXnRkTbwwlgJuzRx5j6wWEGTw+5jtL8C+4ce6WleSRdubR2cL48ugoTsE/7TvCXp4C3q10qurvwYlJJ8NEpqoaAf/Io3+bxlaklcX93EaG/SwTE6fD6Oej5WACOH7ewjF0O0pjv6gvVMesKY3cLhHjzYWAhG9qlmMVazYhuECcaAsKqYpmn8PQb1r+KqteWwWU3l9R82I33Rkf4X0kGlWprK+tB2Z7kdd4wgX6DZ5HxcGSLM6C8FiZZnNQ61aiXuaOA24PdPpvgCrgK0S+q0JzlfwS3ctFeTmRw+6a4saNV8mSG3SSokCzzcFhd0lbd7CwqNCsYWMhn5rrtt4CfwTNxkljDFVpwM1TXczODSNmfJHBFgXhlyeSC5NFPjpsLFFdIqM3XFl0lGtaF75XyO9JCjIN6fwAFo6Wp4Z7bvC84/G1/uU05vQYGp9BP1VHz/hHn9hUrR69p/2zuEzU0DG0bjLUEobnncdAVEcSZ+QyWGUEkeuxgN/s1wZ7stHlDbIA4uTAY/EHqNkFa46j3huEM3w92D9qWj1rX0nCsQR5gCNMPDh48QS4s1iQ6rU+g51euIoDcpE8ET9Fja9acDNTKv3iJ8fOCq+D4aidSI/mBMbk8DPM22aSIgICLSLBwyXN6mVEm9iyL58UTxojkntyl6JTMSLTFhrZhG5QgeDdB/bnXP63Zm+p00Z+NFJgvFFlYN7iJ4dekcwaU6YHAx3H2hVUgY+qMxbRU2kHjvVQ2vuCn59SDLE/APt54N+lZvVgKeZQOIzGxDkoRAcXJ4CorlHVCyXXS9Zygn68EocSYl4qwHfW1nEc4HVXWkkBdVdhtX2++n6nj8oGGPKUq7fE8/dBMLHXSumrprdWa+WCMp4G0o0KnJm2w4GP785NVLm/p4UofHAHTV4dnbpB7H4hsC32+k0Ckwg4,iv:E3/6s2Olc35kdZHxLNWcd6Y6cc+W5comXWipRdwvkZg=,tag:DJvYgIaVMWeJqIAZoiEEVw==,type:str]",
+	"sops": {
+		"kms": [
+			{
+				"arn": "arn:aws:kms:eu-central-1:310830963532:key/mrk-9e8c23191f1741289211dadb4d0767e8",
+				"created_at": "2022-04-27T01:13:27Z",
+				"enc": "AQICAHg/l3PW9DQsmOmkmKzHr1yZLJ4ZNJ0/QSakfJT5vDDv+wGTdk2LrG/hhQyhwOVUTNyPAAAAfjB8BgkqhkiG9w0BBwagbzBtAgEAMGgGCSqGSIb3DQEHATAeBglghkgBZQMEAS4wEQQMFSdd4daEly5495TxAgEQgDtpry5VuCaneOkUXQpQ7/3fCtMDyGSipYBxI6mckuaczM3iJr6qHBPvlW5M5x/njotHLe9IUsZyIS+Niw==",
+				"aws_profile": ""
+			}
+		],
+		"gcp_kms": null,
+		"azure_kv": null,
+		"hc_vault": null,
+		"age": null,
+		"lastmodified": "2022-04-27T01:13:27Z",
+		"mac": "ENC[AES256_GCM,data:OOPVgEcBP+htv24WfhdDcNyg9wYOOjjodPE7uiXIFqMLJHwHnQU1dfliMlcD5iQIyJvIYA+vOoiALCZVPJMQwKwalwGS07MVc3Nysp3MtwnnbqkJANOarhQG438Hsm2bTqPNebwdBgRGFBsCGAtIqaoVjoFq+PqiGc6bUjPAimU=,iv:X2gWrkbNDvbPRRMSZpK6253JVJTyIyppfJE+0bVnC2o=,tag:ewd2FpGsBEDgQoIh7RHtsw==,type:str]",
+		"pgp": null,
+		"unencrypted_suffix": "_unencrypted",
+		"version": "3.7.1"
+	}
+}

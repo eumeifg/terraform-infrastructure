@@ -1,0 +1,36 @@
+{
+  "Version" : "2012-10-17",
+  "Statement" : [
+    {
+      "Effect" : "Allow",
+      "Action" : "secretsmanager:ListSecrets",
+      "Resource" : "*"
+    },
+    {
+      "Effect" : "Allow",
+      "Action" : [
+        "secretsmanager:GetSecretValue"
+      ],
+      "Resource" : [
+        "arn:aws:secretsmanager:eu-central-1:614592275287:secret:*"
+      ]
+    },
+    {
+      "Effect" : "Allow",
+      "Action" : [
+        "ssm:GetParameter"
+      ],
+      "Resource" : "*"
+    },
+    {
+      "Action": [
+          "ecr:BatchCheckLayerAvailability",
+          "ecr:BatchGetImage",
+          "ecr:GetDownloadUrlForLayer",
+          "ecr:GetAuthorizationToken"
+      ],
+      "Effect": "Allow",
+      "Resource": "*"
+    }
+  ]
+}

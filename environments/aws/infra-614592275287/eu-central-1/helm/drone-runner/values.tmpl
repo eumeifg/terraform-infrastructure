@@ -1,0 +1,20 @@
+image:
+  repository: drone/drone-runner-kube
+  tag: linux-amd64
+replicaCount: 3
+rbac:
+  buildNamespaces:
+    - drone
+podAnnotations:
+  eks.amazonaws.com/role-arn: ${role_arn}
+env:
+  DRONE_RPC_SECRET: ${drone_rpc_secret}
+  DRONE_RPC_HOST: drone.drone.svc.cluster.local
+  DRONE_RPC_PROTO: http
+  DRONE_SECRET_PLUGIN_ENDPOINT: http://drone-kubernetes-secrets:3000
+  DRONE_SECRET_PLUGIN_TOKEN: ${drone_secret_plugin_token}
+  DRONE_NAMESPACE_DEFAULT: drone
+  DRONE_SERVICE_ACCOUNT_DEFAULT: drone-runner-kube
+  DRONE_RESOURCE_MIN_REQUEST_CPU: 1000
+  DRONE_RESOURCE_MIN_REQUEST_MEMORY: 1024MiB
+  DRONE_IMAGE_PLACEHOLDER: 310830963532.dkr.ecr.eu-central-1.amazonaws.com/drone-placeholder:1

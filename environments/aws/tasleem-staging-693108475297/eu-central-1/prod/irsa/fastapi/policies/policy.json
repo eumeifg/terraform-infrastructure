@@ -1,0 +1,11 @@
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Action": ["ses:*"],
+            "Effect": "Allow",
+            "Resource": "arn:aws:ses:eu-central-1:693108475297:identity/tasleem.taza.iq",
+            "Sid": "AuthorizeAccountTaza"
+        }
+    ]
+}

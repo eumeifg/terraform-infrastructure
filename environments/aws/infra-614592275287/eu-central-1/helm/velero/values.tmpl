@@ -1,0 +1,70 @@
+clusterName: ${cluster_name}
+configuration:
+  backupStorageLocation:
+    bucket: ${s3_bucket}
+    prefix: infra-prod
+  provider: aws
+  volumeSnapshotLocation:
+    config:
+      region: ${region}
+credentials:
+  useSecret: false
+initContainers:
+- name: velero-plugin-for-aws
+  image: velero/velero-plugin-for-aws:v1.2.0
+  volumeMounts:
+  - mountPath: /target
+    name: plugins
+serviceAccount:
+  server:
+    annotations:
+      eks.amazonaws.com/role-arn: ${role_arn}
+schedules:
+  argocd-k8s-sch:
+    disabled: false
+    schedule: "0 23 * * *"
+    useOwnerReferencesInBackup: false
+    template:
+      ttl: "240h"
+      includedNamespaces:
+      - argocd
+  chartmuseum-k8s-sch:
+    disabled: false
+    schedule: "0 22 * * *"
+    useOwnerReferencesInBackup: false
+    template:
+      ttl: "240h"
+      includedNamespaces:
+      - chartmuseum
+  drone-k8s-sch:
+    disabled: false
+    schedule: "0 21 * * *"
+    useOwnerReferencesInBackup: false
+    template:
+      ttl: "240h"
+      includedNamespaces:
+      - drone
+  karpenter-k8s-sch:
+    disabled: false
+    schedule: "0 20 * * *"
+    useOwnerReferencesInBackup: false
+    template:
+      ttl: "240h"
+      includedNamespaces:
+      - karpenter
+  monitoring-k8s-sch:
+    disabled: false
+    schedule: "0 19 * * *"
+    useOwnerReferencesInBackup: false
+    template:
+      ttl: "240h"
+      includedNamespaces:
+      - monitoring
+  zoho-k8s-sch:
+    disabled: false
+    schedule: "0 18 * * *"
+    useOwnerReferencesInBackup: false
+    template:
+      ttl: "240h"
+      includedNamespaces:
+      - zoho

@@ -1,0 +1,18 @@
+serviceAccount:
+  annotations:
+    eks.amazonaws.com/role-arn: ${service_account}
+serviceMonitor:
+  enabled: true
+controller:
+  resources:
+    limits:
+      memory: 1Gi
+    requests:
+      cpu: 1
+      memory: 1Gi
+logLevel: "info"
+settings:
+  aws:
+    clusterName: ${cluster_name}
+    clusterEndpoint: ${cluster_endpoint}
+    defaultInstanceProfile: ${aws_default_instance_profile}

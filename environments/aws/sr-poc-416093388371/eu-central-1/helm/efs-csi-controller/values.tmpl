@@ -1,0 +1,23 @@
+image:
+  repository: amazon/aws-efs-csi-driver
+  tag: master
+  pullPolicy: Always
+controller:
+  serviceAccount:
+    create: true
+    name: efs-csi-controller-sa
+    annotations:
+      eks.amazonaws.com/role-arn: ${role_arn}
+storageClasses:
+- name: efs
+  mountOptions:
+  - tls
+  parameters:
+    provisioningMode: efs-ap
+    fileSystemId:  fs-0061207ec5ac21574
+    gid: "1000"
+    uid: "1000"
+    directoryPerms: "700"
+    basePath: "/dynamic_provisioning"
+  reclaimPolicy: Delete
+  volumeBindingMode: Immediate

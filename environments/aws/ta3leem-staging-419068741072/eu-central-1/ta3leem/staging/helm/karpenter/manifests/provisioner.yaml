@@ -1,0 +1,69 @@
+apiVersion: karpenter.sh/v1alpha5
+kind: Provisioner
+metadata:
+  name: eks-ta3leem-staging
+spec:
+  ttlSecondsAfterEmpty: 300
+  requirements:
+    - key: "node.kubernetes.io/instance-type"
+      operator: NotIn
+      values: ["t3.small", "t3.medium", "t3a.small", "t3a.medium", "g3s.xlarge", "m6g.16xlarge", "m6gd.16xlarge", "r6g.16xlarge", "r6gd.16xlarge", "c6g.16xlarge"]
+    - key: "topology.kubernetes.io/zone"
+      operator: In
+      values: ["eu-central-1a", "eu-central-1b"]
+    - key: "kubernetes.io/arch"
+      operator: In
+      values: ["amd64"]
+    - key: "karpenter.sh/capacity-type" # If not included, the webhook for the AWS cloud provider will default to on-demand
+      operator: In
+      values: ["spot"]
+  limits:
+    resources:
+      cpu: "64"
+      memory: 256Gi
+  provider:
+    subnetSelector:
+      karpenter.sh/discovery: eks-ta3leem-staging
+    securityGroupSelector:
+      karpenter.sh/discovery: eks-ta3leem-staging
+    blockDeviceMappings:
+      - deviceName: /dev/xvda
+        ebs:
+          volumeSize: 50Gi
+---
+apiVersion: karpenter.sh/v1alpha5
+kind: Provisioner
+metadata:
+  name: eks-ta3leem-staging-gpu
+spec:
+  ttlSecondsAfterEmpty: 300
+  requirements:
+    - key: "node.kubernetes.io/instance-type"
+      operator: In
+      values: ["g3s.xlarge"]
+    - key: "topology.kubernetes.io/zone"
+      operator: In
+      values: ["eu-central-1a", "eu-central-1b"]
+    - key: "kubernetes.io/arch"
+      operator: In
+      values: ["amd64"]
+    - key: "karpenter.sh/capacity-type" # If not included, the webhook for the AWS cloud provider will default to on-demand
+      operator: In
+      values: ["spot"]
+  taints:
+    - effect: NoSchedule
+      key: "nvidia.com/gpu"
+      value: "true"
+  limits:
+    resources:
+      cpu: "4"
+      memory: 32Gi
+  provider:
+    subnetSelector:
+      karpenter.sh/discovery: eks-ta3leem-staging
+    securityGroupSelector:
+      karpenter.sh/discovery: eks-ta3leem-staging
+    blockDeviceMappings:
+      - deviceName: /dev/xvda
+        ebs:
+          volumeSize: 100Gi

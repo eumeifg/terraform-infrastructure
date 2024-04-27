@@ -1,0 +1,54 @@
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "S3storgeBackend",
+            "Effect": "Allow",
+            "Action": [
+                "s3:*"
+            ],
+            "Resource": [
+                "arn:aws:s3:::vault-state-614592275287/*",
+                "arn:aws:s3:::vault-state-614592275287/"
+            ]
+        },
+        {   "Sid": "EnableKMSForVaultAutoUnseal",
+            "Action": [
+                "kms:Encrypt",
+                "kms:Decrypt",
+                "kms:DescribeKey"
+            ],
+            "Effect": "Allow",
+            "Resource": [
+                "arn:aws:kms:eu-central-1:614592275287:key/b24160bc-7265-4574-96fa-d27956b0b8c5"
+            ]
+        },
+        {
+            "Sid": "EnableDynamicUserGeneration",
+            "Effect": "Allow",
+            "Action": [
+              "iam:AttachUserPolicy",
+              "iam:CreateAccessKey",
+              "iam:CreateUser",
+              "iam:DeleteAccessKey",
+              "iam:DeleteUser",
+              "iam:DeleteUserPolicy",
+              "iam:DetachUserPolicy",
+              "iam:GetUser",
+              "iam:ListAccessKeys",
+              "iam:ListAttachedUserPolicies",
+              "iam:ListGroupsForUser",
+              "iam:ListUserPolicies",
+              "iam:PutUserPolicy",
+              "iam:AddUserToGroup",
+              "iam:RemoveUserFromGroup"
+            ],
+            "Resource": ["arn:aws:iam::614592275287:user/vault"]
+        },
+        {
+            "Effect": "Allow",
+            "Action": "sts:AssumeRole",
+            "Resource": "arn:aws:iam::310830963532:role/DevOps"    
+        }
+    ]
+}

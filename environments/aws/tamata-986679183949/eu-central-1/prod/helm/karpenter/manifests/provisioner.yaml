@@ -1,0 +1,128 @@
+apiVersion: karpenter.sh/v1alpha5
+kind: Provisioner
+metadata:
+  name: eks-tamata-prod
+spec:
+  consolidation:
+    enabled: true
+  requirements:
+    - key: "node.kubernetes.io/instance-type"
+      operator: In
+      values:
+        - c5.2xlarge
+        - c5a.2xlarge
+        - c5ad.2xlarge
+        - m5.2xlarge
+        - m5a.2xlarge
+    - key: "topology.kubernetes.io/zone"
+      operator: In
+      values:
+        - eu-central-1a
+        - eu-central-1b
+        - eu-central-1c
+    - key: "kubernetes.io/arch"
+      operator: In
+      values:
+        - amd64
+    - key: "karpenter.sh/capacity-type"
+      operator: In
+      values:
+        - spot
+  limits:
+    resources:
+      cpu: "256"
+      memory: 1024Gi
+  providerRef:
+    name: tamata-prod-app
+---
+apiVersion: karpenter.sh/v1alpha5
+kind: Provisioner
+metadata:
+  name: eks-tamata-prod-main
+spec:
+  ttlSecondsAfterEmpty: 300
+  requirements:
+    - key: "node.kubernetes.io/instance-type"
+      operator: In
+      values:
+        - r6a.large
+        - r6i.large
+        - r6a.xlarge
+        - r6i.xlarge
+    - key: "topology.kubernetes.io/zone"
+      operator: In
+      values:
+        - eu-central-1a
+        - eu-central-1b
+        - eu-central-1c
+    - key: "kubernetes.io/arch"
+      operator: In
+      values:
+        - amd64
+    - key: karpenter.sh/capacity-type
+      operator: In
+      values:
+        - on-demand
+  taints:
+    - effect: NoSchedule
+      key: "group"
+      value: "main"
+  labels:
+    group: "main"
+  limits:
+    resources:
+      cpu: "32"
+      memory: 256Gi
+  providerRef:
+    name: tamata-prod-main
+---
+apiVersion: karpenter.k8s.aws/v1alpha1
+kind: AWSNodeTemplate
+metadata:
+  name: tamata-prod-app
+spec:
+  metadataOptions:
+    httpEndpoint: enabled
+    httpProtocolIPv6: disabled
+    httpPutResponseHopLimit: 2
+    httpTokens: required
+  subnetSelector:
+    karpenter.sh/discovery: eks-tamata-prod
+  securityGroupSelector:
+    karpenter.sh/discovery: eks-tamata-prod
+  tags:
+    Environment: production
+    Owner: Creative DevOps
+    Project: TAMATA
+  blockDeviceMappings:
+    - deviceName: /dev/xvda
+      ebs:
+        volumeSize: 100Gi
+        volumeType: gp3
+        iops: 10000
+        encrypted: true
+---
+apiVersion: karpenter.k8s.aws/v1alpha1
+kind: AWSNodeTemplate
+metadata:
+  name: tamata-prod-main
+spec:
+  metadataOptions:
+    httpEndpoint: enabled
+    httpProtocolIPv6: disabled
+    httpPutResponseHopLimit: 2
+    httpTokens: required
+  subnetSelector:
+    karpenter.sh/discovery: eks-tamata-prod
+  securityGroupSelector:
+    karpenter.sh/discovery: eks-tamata-prod
+  tags:
+    Environment: production
+    Owner: Creative DevOps
+    Project: TAMATA
+  blockDeviceMappings:
+    - deviceName: /dev/xvda
+      ebs:
+        volumeSize: 50Gi
+        volumeType: gp3
+        encrypted: true

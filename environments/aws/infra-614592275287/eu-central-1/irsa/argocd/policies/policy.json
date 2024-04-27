@@ -1,0 +1,29 @@
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Action": "sts:GetCallerIdentity",
+            "Effect": "Allow",
+            "Resource": "*"
+        },
+        {
+            "Action": [
+                "eks:DescribeCluster",
+                "eks:ListClusters"
+            ],
+            "Effect": "Allow",
+            "Resource": "*"
+        },
+        {
+            "Action": [
+                "kms:Encrypt",
+                "kms:Decrypt",
+                "kms:List*"
+            ],
+            "Effect": "Allow",
+            "Resource": [
+                "arn:aws:kms:eu-central-1:310830963532:key/mrk-9e8c23191f1741289211dadb4d0767e8"
+            ]
+        }
+    ]
+}

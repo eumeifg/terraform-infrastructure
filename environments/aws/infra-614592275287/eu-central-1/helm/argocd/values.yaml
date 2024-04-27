@@ -1,0 +1,182 @@
+global:
+    image:
+        repository: 310830963532.dkr.ecr.eu-central-1.amazonaws.com/argocd
+        tag: v2.7.1-0
+controller:
+    securityContext:
+        runAsUser: 999
+    metrics:
+        enabled: true
+        serviceMonitor:
+            enabled: true
+    resources:
+        limits:
+            memory: 4Gi
+        requests:
+            cpu: 2
+            memory: 4Gi
+dex:
+    securityContext:
+        runAsUser: 999
+    image:
+        tag: v2.30.3
+    metrics:
+        enabled: true
+        serviceMonitor:
+            enabled: true
+    resources:
+        limits:
+            memory: 128Mi
+        requests:
+            cpu: 50m
+            memory: 128Mi
+redis:
+    resources:
+        limits:
+            memory: 256Mi
+        requests:
+            cpu: 20m
+            memory: 128Mi
+server:
+    securityContext:
+        runAsUser: 999
+    autoscaling:
+        enabled: true
+    resources:
+        limits:
+            memory: 256Mi
+        requests:
+            cpu: 100m
+            memory: 256Mi
+    metrics:
+        enabled: true
+        serviceMonitor:
+            enabled: true
+    ingress:
+        enabled: true
+        annotations:
+            external-dns.alpha.kubernetes.io/hostname: argocd.creativeadvtech.ml
+            kubernetes.io/ingress.class: alb
+            alb.ingress.kubernetes.io/ssl-redirect: "443"
+            alb.ingress.kubernetes.io/ssl-policy: ELBSecurityPolicy-TLS-1-1-2017-01
+            alb.ingress.kubernetes.io/listen-ports: '[{"HTTP":80, "HTTPS":443}]'
+            alb.ingress.kubernetes.io/scheme: internet-facing
+            alb.ingress.kubernetes.io/backend-protocol: HTTP
+            alb.ingress.kubernetes.io/target-type: ip
+            alb.ingress.kubernetes.io/group.name: infrastructure
+            alb.ingress.kubernetes.io/load-balancer-attributes: idle_timeout.timeout_seconds=1200
+        hosts:
+            - argocd.creativeadvtech.ml
+        https: true
+configs:
+    params:
+        server.insecure: true
+    cm:
+        url: https://argocd.creativeadvtech.ml
+        helm.valuesFileSchemes: secrets+gpg-import, secrets+gpg-import-kubernetes, secrets+age-import, secrets+age-import-kubernetes, secrets, https, git, s3
+    credentialTemplates:
+        bitnami:
+            url: https://charts.bitnami.com/bitnami
+        chartmuseum:
+            url: https://chartmuseum.creativeadvtech.ml
+        bitbucket:
+            url: git@bitbucket.org:creativeadvtech/
+repoServer:
+    securityContext:
+        runAsUser: 999
+    autoscaling:
+        enabled: true
+    env:
+        - name: ARGOCD_EXEC_TIMEOUT
+          value: 5m
+    serviceAccount:
+        create: true
+        annotations:
+            eks.amazonaws.com/role-arn: arn:aws:iam::614592275287:role/argocd-serviceaccount-eks-creative-advtech-infra
+        name: argocd-serviceaccount
+    resources:
+        limits:
+            memory: 2Gi
+        requests:
+            cpu: 1
+            memory: 2Gi
+    metrics:
+        enabled: true
+        serviceMonitor:
+            enabled: true
+applicationSet:
+    resources:
+        limits:
+            memory: 1Gi
+        requests:
+            cpu: 200m
+            memory: 1Gi
+    metrics:
+        enabled: true
+        serviceMonitor:
+            enabled: true
+notifications:
+    enabled: true
+    name: notifications-controller
+    argocdUrl: https://argocd.creativeadvtech.ml
+    securityContext:
+        runAsUser: 999
+    serviceAccount:
+        create: true
+        name: argocd-notifications-controller
+    notifiers:
+        service.webex: |
+            token: $webex-token
+        service.opsgenie: |
+            apiUrl: api.opsgenie.com
+            apiKeys:
+                DevOps-Team: $opsgenie-token
+
+    subscriptions:
+        - recipients:
+            - webex:Y2lzY29zcGFyazovL3VybjpURUFNOnVzLXdlc3QtMl9yL1JPT00vNzJiY2E0ZDAtYTUxMy0xMWVjLTlkOGMtOGI3NWUwNTdlOWE1
+            - webex:infra-alerts
+          triggers:
+            - on-sync-status-unknown
+            - on-sync-failed
+
+    templates:
+        template.app-sync-status-unknown: |
+            message: |
+                **Argo sync**
+                Application {{.app.metadata.name}} sync status is 'Unknown'!
+
+    triggers:
+        trigger.on-deployed: |
+          - description: Application is synced and healthy. Triggered once per commit.
+            oncePer: app.status.sync.revision
+            send:
+            - app-deployed
+            when: app.status.operationState.phase in ['Succeeded'] and app.status.health.status == 'Healthy'
+        trigger.on-health-degraded: |
+          - description: Application has degraded
+            send:
+            - app-health-degraded
+            when: app.status.health.status == 'Degraded'
+        trigger.on-sync-failed: |
+          - description: Application syncing has failed
+            send:
+            - app-sync-failed
+            when: app.status.operationState.phase in ['Error', 'Failed']
+        trigger.on-sync-running: |
+          - description: Application is being synced
+            send:
+            - app-sync-running
+            when: app.status.operationState.phase in ['Running']
+        trigger.on-sync-status-unknown: |
+          - description: Application status is 'Unknown'
+            send:
+            - app-sync-status-unknown
+            when: app.status.sync.status == 'Unknown'
+        trigger.on-sync-succeeded: |
+          - description: Application syncing has succeeded
+            send:
+            - app-sync-succeeded
+            when: app.status.operationState.phase in ['Succeeded']
+        defaultTriggers: |
+          - on-sync-status-unknown

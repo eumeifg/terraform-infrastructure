@@ -1,0 +1,46 @@
+loki:
+  overrideConfiguration:
+    schema_config:
+      configs:
+      - from: 2020-10-24
+        store: boltdb-shipper
+        object_store: aws
+        schema: v11
+        index:
+          prefix: index_
+          period: 24h
+    storage_config:
+      boltdb_shipper:
+        shared_store: s3
+        cache_ttl: 72h
+      aws:
+        s3: s3://eu-central-1/sr-staging-logs
+    table_manager:
+      retention_deletes_enabled: true
+      retention_period: 2160h
+    compactor:
+      shared_store: s3
+      working_directory: "{{ .Values.loki.dataDir }}/loki/compactor/data/retention"
+      retention_enabled: true
+compactor:
+  persistence:
+    enabled: false
+gateaway:
+  auth:
+    enabled: true
+    username: admin
+    password: ${gatewayAuthPassword}
+ingester:
+  persistence:
+    enabled: false
+querier:
+  persistence:
+    enabled: false
+serviceAccount:
+  create: true
+  annotations:
+    eks.amazonaws.com/role-arn: ${loki_role}
+metrics:
+  enabled: true
+  serviceMonitor:
+    enabled: true

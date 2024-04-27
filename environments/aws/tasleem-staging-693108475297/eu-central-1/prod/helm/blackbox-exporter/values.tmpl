@@ -1,0 +1,16 @@
+resources:
+  limits:
+    cpu: 20m
+    memory: 32Mi
+  requests:
+    cpu: 20m
+    memory: 32Mi
+serviceMonitor:
+  enabled: true
+  targets:
+  - name: tasleem-admin-ui
+    url: https://tasleem.taza.iq
+  - name: tasleem-fastapi
+    url: https://fastapi.tasleem.taza.iq/api/v1/health
+  - name: tasleem-frappe
+    url: https://cloud.tasleem.iq

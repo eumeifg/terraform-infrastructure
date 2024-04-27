@@ -1,0 +1,25 @@
+{
+    "Version" : "2008-10-17",
+    "Statement" : [
+        {
+            "Effect" : "Allow",
+            "Principal" : {
+                "AWS" : [
+                    "arn:aws:iam::310830963532:root",
+                    "arn:aws:iam::024658484249:root"
+                ]
+            },
+            "Action" : [
+                "ecr:BatchCheckLayerAvailability",
+                "ecr:BatchGetImage",
+                "ecr:CompleteLayerUpload",
+                "ecr:GetAuthorizationToken",
+                "ecr:GetDownloadUrlForLayer",
+                "ecr:GetLifecyclePolicy",
+                "ecr:InitiateLayerUpload",
+                "ecr:PutImage",
+                "ecr:UploadLayerPart"
+            ]
+        }
+    ]
+}

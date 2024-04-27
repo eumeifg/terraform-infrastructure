@@ -1,0 +1,60 @@
+image:
+    repository: 310830963532.dkr.ecr.eu-central-1.amazonaws.com/drone
+    tag: 2.16.0
+podAnnotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/port: "80"
+ingress:
+    enabled: true
+    className: alb
+    annotations:
+        external-dns.alpha.kubernetes.io/hostname: drone.creativeadvtech.ml
+        alb.ingress.kubernetes.io/group.name: infrastructure
+        alb.ingress.kubernetes.io/ssl-redirect: "443"
+        alb.ingress.kubernetes.io/ssl-policy: ELBSecurityPolicy-TLS-1-1-2017-01
+        alb.ingress.kubernetes.io/listen-ports: '[{"HTTP":80, "HTTPS":443}]'
+        alb.ingress.kubernetes.io/scheme: internet-facing
+        alb.ingress.kubernetes.io/backend-protocol: HTTP
+        alb.ingress.kubernetes.io/target-type: ip
+        alb.ingress.kubernetes.io/load-balancer-attributes: routing.http.drop_invalid_header_fields.enabled=true, deletion_protection.enabled=true
+    hosts:
+        - host: drone.creativeadvtech.ml
+          paths:
+            - path: /*
+              pathType: ImplementationSpecific
+persistentVolume:
+    enabled: true
+    size: 50Gi
+    storageClass: gp2
+resources:
+    limits:
+        memory: 6Gi
+    requests:
+        cpu: 2
+        memory: 4Gi
+env:
+    DRONE_DATABASE_DRIVER: sqlite3
+    DRONE_BITBUCKET_DEBUG: false
+    DRONE_SERVER_HOST: drone.creativeadvtech.ml
+    DRONE_SERVER_PROTO: https
+    DRONE_LOGS_DEBUG: false
+    DRONE_LOGS_COLOR: true
+    DRONE_BITBUCKET_CLIENT_ID: ENC[AES256_GCM,data:qSq7+TSdotJQCmfQy2KeX0lU,iv:aWkadq/uoEk8LjbuJq762bRVOmWIBrCAKoTLjPQhBF4=,tag:dJI0oHCZSwQ/maHQpXv9CQ==,type:str]
+    DRONE_BITBUCKET_CLIENT_SECRET: ENC[AES256_GCM,data:nmNLVP0PrPy3Tt2vu31B9m+SWpGdUeO9c+CqDxAG39Y=,iv:wrWLtAi0ELFfjzcTLt0yXIzl6efpSJSj6CzFs3xTtmg=,tag:KHGcoPs44NtxKdwMRtSMYQ==,type:str]
+    DRONE_RPC_SECRET: ENC[AES256_GCM,data:FHkljjXVyjZwQ41vEovs72smhNT+mhOH05lP,iv:SFv66A4Bi3uZSauMIt7t603pdbNtEP0wg6LfPJwMmI4=,tag:zVH+Ld4x1Jgfb0NNrHkZKQ==,type:str]
+    DRONE_LICENSE: ENC[AES256_GCM,data:uZBc37KtxsWlhyZgRHRlJ9gT3fc0cITMv3o19e5HFJaowcHeWiIB6rAsrQ0c2ZiUglSYyH6N1rQhSPkZuowW9bppJkrVx4+kgwEUMXZYyGivtnfI/DCd3aDgBqtY9RP8ZtwtHEln67qD0iCs9TtRRP0i2cQ0YkgClXPFMhz93/7O33OrgeOx0GkkFMt4pGZciuZtdZaLEWAUtb/6sPePym/fT8g728MQebR/8BDiAbnSstBP3/EcYjMjCeOn0jIEQsjlP1QqjjReocbk4quzC47w8TaOtGKFRCoJ5xKyJ+Abqmd6kfmu2DzrlN2gE1iTOtL8dg0hdW1PeSaa/ClRS5xo6OXut75VLBh+iz67V9/n0wGCaVVO3syQWR52XtcmbucXyJgN0mP8WKtbEXVqvIf6+tovOjnZIXbXWFthuzEtpMxqGqlkxNcE3cLEgSDj9ww7aQBHW1834IIHyw45w5CMG5IzGCUbf3VC75+u9pnaw61145F/Dn8m56eHGH7WI5GhBRBMhVdy3+JdjmTjTg==,iv:x1rWa5o7cPTgiPjyP9zmXPY8BwF5dAeuhksguRBb8+g=,tag:8PPJl0qHiVEccNztm69b9g==,type:str]
+sops:
+    kms:
+        - arn: arn:aws:kms:eu-central-1:310830963532:key/mrk-9e8c23191f1741289211dadb4d0767e8
+          created_at: "2023-02-20T12:02:26Z"
+          enc: AQICAHg/l3PW9DQsmOmkmKzHr1yZLJ4ZNJ0/QSakfJT5vDDv+wEiDIp0kHpvadAz2/2MfG4rAAAAfjB8BgkqhkiG9w0BBwagbzBtAgEAMGgGCSqGSIb3DQEHATAeBglghkgBZQMEAS4wEQQM17/hHiz5fRVfL67dAgEQgDs452DkrrA2B5xsSfws0jwhCqOAtxaH/pfzSWtrpD1TGd/aHInb8UVyl6QhUt64wC0zyDDGu+I5W61bxQ==
+          aws_profile: ""
+    gcp_kms: []
+    azure_kv: []
+    hc_vault: []
+    age: []
+    lastmodified: "2023-02-23T16:03:04Z"
+    mac: ENC[AES256_GCM,data:Z5647mpaXH8GD8PtbXVvCJ4CgIT+nwsKqITVNpZjfqyD4yQEFv7QiAZAFdYKR0d7Th8auNuz8Vdr7VCv9V5sjlSfsjPhPknFl3CU4yVVu/5K1zXzKmXze+iKLwCQDJLkkS+tOayRKoit9jNr6jJyoIKTqZAsaZIAr2zqwCM/oRQ=,iv:3PLF21GCDj3Efl01fC3nq8rKHUPgRyzsZiUR11a8XAc=,tag:j7vjZp4UasZOfnPg9wAkUg==,type:str]
+    pgp: []
+    encrypted_regex: DRONE_BITBUCKET_CLIENT_ID|DRONE_BITBUCKET_CLIENT_SECRET|DRONE_RPC_SECRET|DRONE_LICENSE
+    version: 3.7.3

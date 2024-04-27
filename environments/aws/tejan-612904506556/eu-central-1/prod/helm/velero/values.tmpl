@@ -1,0 +1,31 @@
+clusterName: ${cluster_name}
+configuration:
+  backupStorageLocation:
+    bucket: ${s3_bucket}
+    prefix: velero
+  provider: aws
+  volumeSnapshotLocation:
+    name: aws
+    config:
+      region: ${region}
+credentials:
+  useSecret: false
+initContainers:
+- name: velero-plugin-for-aws
+  image: velero/velero-plugin-for-aws:v1.4.1
+  volumeMounts:
+  - mountPath: /target
+    name: plugins
+serviceAccount:
+  server:
+    annotations:
+      eks.amazonaws.com/role-arn: ${role_arn}
+schedules:
+  tejan-k8s-sch:
+    disabled: false
+    schedule: "0 23 * * *"
+    useOwnerReferencesInBackup: false
+    template:
+      ttl: "240h"
+      includedNamespaces:
+      - frappe

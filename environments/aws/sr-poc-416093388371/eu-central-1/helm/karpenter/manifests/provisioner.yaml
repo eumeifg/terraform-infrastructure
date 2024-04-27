@@ -1,0 +1,128 @@
+apiVersion: karpenter.sh/v1alpha5
+kind: Provisioner
+metadata:
+  name: eks-sr-staging
+spec:
+  consolidation:
+    enabled: true
+  requirements:
+    - key: "node.kubernetes.io/instance-type"
+      operator: In
+      values:
+      - c5a.xlarge
+      - c5.xlarge
+      - c5ad.xlarge
+      - c6a.xlarge
+      - c5a.2xlarge
+      - c5.2xlarge
+      - c5ad.2xlarge
+      - c6a.2xlarge
+      - c5ad.8xlarge
+    - key: "topology.kubernetes.io/zone"
+      operator: In
+      values:
+      - eu-central-1a
+      - eu-central-1b
+      - eu-central-1c
+    - key: "kubernetes.io/arch"
+      operator: In
+      values:
+      - amd64
+    - key: "karpenter.sh/capacity-type"
+      operator: In
+      values:
+      - spot
+  limits:
+    resources:
+      cpu: "128"
+      memory: 256Gi
+  providerRef:
+    name: sr-staging
+---
+---
+apiVersion: karpenter.sh/v1alpha5
+kind: Provisioner
+metadata:
+  name: eks-sr-staging-gpu
+spec:
+  consolidation:
+    enabled: true
+  requirements:
+    - key: "node.kubernetes.io/instance-type"
+      operator: In
+      values:
+        - g4dn.2xlarge
+    - key: "topology.kubernetes.io/zone"
+      operator: In
+      values:
+        - eu-central-1a
+        - eu-central-1b
+    - key: "kubernetes.io/arch"
+      operator: In
+      values:
+        - amd64
+    - key: "karpenter.sh/capacity-type"
+      operator: In
+      values:
+        - spot
+        - on-demand
+  taints:
+    - key: nvidia.com/gpu
+      effect: "NoSchedule"
+  labels:
+    group: "gpu"
+  limits:
+    resources:
+      cpu: "16"
+      memory: 64Gi
+  providerRef:
+    name: eks-sr-staging-gpu
+---
+apiVersion: karpenter.k8s.aws/v1alpha1
+kind: AWSNodeTemplate
+metadata:
+  name: sr-staging
+spec:
+  metadataOptions:
+    httpEndpoint: enabled
+    httpProtocolIPv6: disabled
+    httpPutResponseHopLimit: 2
+    httpTokens: required
+  subnetSelector:
+    karpenter.sh/discovery: eks-sr-poc-staging
+  securityGroupSelector:
+    karpenter.sh/discovery: eks-sr-poc-staging
+  tags:
+    Environment: staging
+    Owner: Creative DevOps
+    Project: Social Reputation
+  blockDeviceMappings:
+    - deviceName: /dev/xvda
+      ebs:
+        volumeSize: 50Gi
+        volumeType: gp3
+        iops: 3000
+---
+apiVersion: karpenter.k8s.aws/v1alpha1
+kind: AWSNodeTemplate
+metadata:
+  name: eks-sr-staging-gpu
+spec:
+  metadataOptions:
+    httpEndpoint: enabled
+    httpProtocolIPv6: disabled
+    httpPutResponseHopLimit: 2
+    httpTokens: required
+  subnetSelector:
+    karpenter.sh/discovery: eks-sr-poc-staging
+  securityGroupSelector:
+    karpenter.sh/discovery: eks-sr-poc-staging
+  tags:
+    Environment: staging
+    Owner: Creative DevOps
+    Project: Social Reputation
+  blockDeviceMappings:
+    - deviceName: /dev/xvda
+      ebs:
+        volumeSize: 100Gi
+        volumeType: gp3

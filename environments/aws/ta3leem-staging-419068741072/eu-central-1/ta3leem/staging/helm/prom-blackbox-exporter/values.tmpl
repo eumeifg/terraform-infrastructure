@@ -1,0 +1,42 @@
+config:
+  modules:
+    http_2xx:
+      prober: http
+      timeout: 5s
+      http:
+        valid_http_versions: ["HTTP/1.1", "HTTP/2.0"]
+        follow_redirects: true
+        preferred_ip_protocol: "ip4"
+    ping:
+      prober: icmp
+      timeout: 5s
+      icmp:
+        preferred_ip_protocol: "ip4"
+    tcp_connect:
+      prober: tcp
+securityContext:
+  capabilities:
+    drop: ["ALL"]
+    add: ["NET_RAW"]
+serviceMonitor:
+  bearerTokenFile: null
+  enabled: true
+  targets:
+    - name: newton-prod
+      url: https://newton.iq/
+    - name: newton-results
+      url: https://results.newton.iq
+    - name: ta3leem-prod
+      url: https://ta3leem.iq/
+    - name: ta3leem-lms
+      url: https://lms.ta3leem.iq/
+    - name: ta3leem-lecturer
+      url: https://lecturer.ta3leem.iq
+    - name: ta3leem-payments
+      url: https://payments.ta3leem.iq
+    - name: ta3leem-online
+      url: https://online.ta3leem.iq
+    - name: ta3leem-learner
+      url: https://learner.ta3leem.iq
+    - name: ta3leem-storage
+      url: https://storage.ta3leem.iq

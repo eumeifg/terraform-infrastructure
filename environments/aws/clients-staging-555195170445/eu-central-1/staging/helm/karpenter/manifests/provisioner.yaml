@@ -1,0 +1,54 @@
+apiVersion: karpenter.sh/v1alpha5
+kind: Provisioner
+metadata:
+  name: eks-clients-staging
+spec:
+  ttlSecondsAfterEmpty: 300
+  requirements:
+    - key: "node.kubernetes.io/instance-type"
+      operator: In
+      values: ["c5a.xlarge", "c5.xlarge", "c5ad.xlarge", "c6a.xlarge", "c5a.2xlarge", "c5.2xlarge"]
+    - key: "topology.kubernetes.io/zone"
+      operator: In
+      values: ["eu-central-1a", "eu-central-1b"]
+    - key: "kubernetes.io/arch"
+      operator: In
+      values: ["amd64"]
+    - key: "karpenter.sh/capacity-type" 
+      operator: In
+      values: ["spot"]
+  limits:
+    resources:
+      cpu: "128"
+      memory: 128Gi
+  provider:
+    subnetSelector:
+      karpenter.sh/discovery: eks-clients-staging
+    securityGroupSelector:
+      karpenter.sh/discovery: eks-clients-staging
+---
+apiVersion: karpenter.k8s.aws/v1alpha1
+kind: AWSNodeTemplate
+metadata:
+  name: clients-staging
+spec:
+  metadataOptions:
+    httpEndpoint: enabled
+    httpProtocolIPv6: disabled
+    httpPutResponseHopLimit: 2
+    httpTokens: required
+  subnetSelector:
+    karpenter.sh/discovery: eks-clients-staging
+  securityGroupSelector:
+    karpenter.sh/discovery: eks-clients-staging
+  tags:
+    Environment: staging
+    Owner: Creative DevOps
+    Project: clients-staging
+  blockDeviceMappings:
+    - deviceName: /dev/xvda
+      ebs:
+        volumeSize: 50Gi
+        volumeType: gp3
+        iops: 3000
+

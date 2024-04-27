@@ -1,0 +1,17 @@
+resources:
+  limits:
+    memory: 32Mi
+  requests:
+    cpu: 20m
+    memory: 32Mi
+serviceMonitor:
+  enabled: true
+  targets:
+  - name: taza-customer-frontend
+    url: https://www.taza.iq
+  - name: taza-fastapi
+    url: https://fastapi.taza.iq/health
+  - name: taza-frappe
+    url: https://frappe.taza.iq
+  - name: taza-grafana
+    url: https://grafana.taza.iq/login

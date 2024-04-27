@@ -1,0 +1,39 @@
+{
+    "Version" : "2008-10-17",
+    "Statement" : [
+        {
+            "Effect" : "Allow",
+            "Principal" : {
+                "AWS" : [
+                    "arn:aws:iam::094354153681:root",
+                    "arn:aws:iam::310830963532:root",
+                    "arn:aws:iam::614592275287:root",
+                    "arn:aws:iam::419068741072:root",
+                    "arn:aws:iam::024658484249:root",
+                    "arn:aws:iam::986679183949:root",
+                    "arn:aws:iam::333991225879:root",
+                    "arn:aws:iam::693108475297:root",
+                    "arn:aws:iam::555195170445:root",
+                    "arn:aws:iam::333810858387:root",
+                    "arn:aws:iam::562646570889:root",
+                    "arn:aws:iam::420711962446:root",
+                    "arn:aws:iam::582187615451:root",
+                    "arn:aws:iam::612904506556:root",
+                    "arn:aws:iam::584573600044:root",
+                    "arn:aws:iam::416093388371:root"
+                ]
+            },
+            "Action" : [
+                "ecr:BatchCheckLayerAvailability",
+                "ecr:BatchGetImage",
+                "ecr:CompleteLayerUpload",
+                "ecr:GetAuthorizationToken",
+                "ecr:GetDownloadUrlForLayer",
+                "ecr:GetLifecyclePolicy",
+                "ecr:InitiateLayerUpload",
+                "ecr:PutImage",
+                "ecr:UploadLayerPart"
+            ]
+        }
+    ]
+}

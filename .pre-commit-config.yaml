@@ -1,0 +1,15 @@
+# This configuration file allows our pre-commit hooks to be used with pre-commit: http://pre-commit.com/
+
+repos:
+- repo: https://github.com/pre-commit/pre-commit-hooks
+  rev: v4.3.0
+  hooks:
+    - id: check-yaml
+      args: [--allow-multiple-documents]
+    - id: end-of-file-fixer
+    - id: trailing-whitespace
+    - id: check-merge-conflict
+- repo: https://github.com/gruntwork-io/pre-commit
+  rev: v0.1.17
+  hooks:
+    - id: terragrunt-hclfmt
